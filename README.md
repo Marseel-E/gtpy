@@ -47,7 +47,7 @@ An open-source example server for the [Growtopia.py](https://github.com/KaJob-de
 - [x] ON_RESPAWN
 - [x] ON_RESPAWN_SPIKE
 
-### Update events (3/42) ⚠️
+### Update events (6/42) ⚠️
 - [x] ON_STATE_UPDATE
 - [ ] ON_CALL_FUNCTION
 - [ ] ON_UPDATE_STATUS
