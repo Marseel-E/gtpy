@@ -52,6 +52,11 @@ An open-source example server for the [Growtopia.py](https://github.com/KaJob-de
 - [ ] ON_CALL_FUNCTION
 - [ ] ON_UPDATE_STATUS
 - [ ] ON_TILE_CHANGE_REQUEST
+    - [x] breaking
+    - [ ] building
+    - [ ] seeds/blocks drop
+    - [ ] gems drop
+    - [ ] xp
 - [ ] ON_TILE_PUNCH
 - [ ] ON_TILE_PLACE
 - [ ] ON_SEND_MAP_DATA
