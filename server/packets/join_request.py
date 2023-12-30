@@ -22,8 +22,7 @@ class JoinRequest(Collection):
 		world: World | None = self.server.get_world(name)
 
 		if world == None:
-			world = WorldGenerator.default(World(name, spawn_pos=(50, 28)))
-			world.version = 20
+			world = WorldGenerator.default(World(name))
 
 			self.server.add_world(world)
 
@@ -38,5 +37,7 @@ class JoinRequest(Collection):
 			)
 
 		ctx.player.send_inventory()
+
+		ctx.player.display_name = ctx.player.name
 
 		ctx.player.send_to_world(world)

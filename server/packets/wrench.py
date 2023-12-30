@@ -1,7 +1,7 @@
-from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext
+from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, GameUpdatePacket
 
 
-class SetIcon(Collection):
+class Wrench(Collection):
 	def __init__(
 		self,
 		server: GameServer,
@@ -16,6 +16,9 @@ class SetIcon(Collection):
 
 
 	@Listener
-	async def on_set_icon_state(self, ctx: ServerContext) -> None:
-		# ctx.packet.net_id = ctx.player.net_id
+	async def on_wrench(self, ctx: ServerContext) -> None:
+		from rich import print as pprint
+		print("on_wrench:")
+		pprint(ctx.packet.__dict__)
+
 		ctx.player.send(packet=ctx.packet)

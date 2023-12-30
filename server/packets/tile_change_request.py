@@ -17,13 +17,12 @@ class TileChangeRequest(Collection):
 
 	@Listener
 	async def on_tile_change_request(self, ctx: ServerContext) -> None:
-		if ctx.item.action_type in [17, 18, 3]:
-			return await self.on_tile_place(ctx)
-
-		ctx.tile.set_item(ctx.item)
-
-		if ctx.item.action_type not in [0, 3, 17, 18]:
-			return ctx.player.send_log("`4This action is unhandled!")
+		from rich import print as pprint
+		pprint(ctx.item.action_type)
+		
+		# Catch wrench
+		if ctx.item.action_type != 1:
+			await self.on_tile_place(ctx)
 
 		ctx.world.broadcast(ctx.tile.update_packet)
 
@@ -47,27 +46,34 @@ class TileChangeRequest(Collection):
 	
 	@Listener
 	async def on_tile_place(self, ctx: ServerContext) -> None:
-		ctx.tile.set_item(ctx.item)
+		kwargs = {}
+		
+		# Doors
+		if ctx.item.action_type == 2:
+			ctx.tile._set_door_extra_data("test_label")
 
-		packet = ctx.tile.update_packet
+			kwargs["id"] = ""
+			kwargs["destination"] = "test"
 
-		# locks
-		if ctx.item.action_type == 3:
-			ctx.tile.foreground = ctx.item.id
+		ctx.tile.set_item(ctx.item, **kwargs)
 
-			if ctx.item.name in ["small lock", "big lock", "huge lock", "builder's lock"]:
-				ctx.tile.lockpos = ctx.tile.pos[0] * ctx.tile.pos[1]
+		ctx.world.broadcast(ctx.tile.update_packet)
 
-			# extra data
-			data = ctx.tile.serialise()
-
-			data += ctx.item.action_type.to_bytes(1, "little") # type
-			data += (0).to_bytes(1, "little") # flags
-			data += ctx.player.net_id.to_bytes(4, "little") # owner
-			data += (0).to_bytes(4, "little") # accessed people = 0
-			data += (0).to_bytes(4, "little") # reserved1 = 0
-			data += (1).to_bytes(4, "little") # reserved2 = 1
-
-			packet.extra_data = data
-
-		ctx.world.broadcast(packet)
+		# foreground blocks = 17
+		# background blocks = 18
+		# locks = 3
+		# doors = 2
+		# wrench = 1
+		# vends = 62
+		# npcs/sings? = 10
+		# jammers = 12
+		# crystals = 56
+		# geiger charger = 100
+		# entrances = 9
+		# bedrock = 15
+		# public lava/lava = 16
+		# spikes = 6
+		# steam spikes = 45
+		# automated steam blocks = 69
+		# magplant = 111
+		# magplant remote = 112
