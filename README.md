@@ -24,7 +24,7 @@ An open-source example server for the [Growtopia.py](https://github.com/KaJob-de
 - [x] ON_DISCONNECT
 - [x] ON_RECEIVE
 
-### Packet events (8/21) ⚠️
+### Packet events (9/21) ⚠️
 - [ ] ON_HELLO
 - [ ] ON_MALFORMED_PACKET
 - [x] ON_LOGIN_REQUEST
@@ -36,7 +36,7 @@ An open-source example server for the [Growtopia.py](https://github.com/KaJob-de
 - [x] ON_REFRESH_ITEM_DATA
 - [x] ON_REFRESH_PLAYER_TRIBUTE_DATA
 - [x] ON_ENTER_GAME
-- [ ] ON_JOIN_REQUEST
+- [x] ON_JOIN_REQUEST
 - [ ] ON_QUIT_TO_EXIT
 - [x] ON_INPUT
 - [ ] ON_WRENCH
@@ -47,7 +47,7 @@ An open-source example server for the [Growtopia.py](https://github.com/KaJob-de
 - [x] ON_RESPAWN
 - [x] ON_RESPAWN_SPIKE
 
-### Update events (6/42) ⚠️
+### Update events (7/42) ⚠️
 - [x] ON_STATE_UPDATE
 - [ ] ON_CALL_FUNCTION
 - [ ] ON_UPDATE_STATUS
@@ -58,7 +58,7 @@ An open-source example server for the [Growtopia.py](https://github.com/KaJob-de
 - [ ] ON_SEND_TILE_UPDATE_DATA
 - [ ] ON_SEND_TILE_UPDATE_DATA_MULTIPLE
 - [ ] ON_TILE_ACTIVATE_REQUEST
-- [ ] ON_TILE_APPLY_DAMAGE
+- [x] ON_TILE_APPLY_DAMAGE
 - [ ] ON_SEND_INVENTORY_STATE
 - [ ] ON_ITEM_ACTIVATE_REQUEST
 - [ ] ON_ITEM_ACTIVATE_OBJECT_REQUEST
