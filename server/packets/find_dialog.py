@@ -13,7 +13,7 @@ class FindDialog(Dialog):
 
 		self.add_elements(
 			DialogElement.quick_exit(),
-			DialogElement.label_with_icon_big("Find", items_data.get_item(name="Magnifying Glass").id),
+			DialogElement.label_with_icon_big("Find", items_data.get_item("Magnifying Glass").id),
 			DialogElement.text_input("search_bar", "", 30),
 			DialogElement.spacer_small(),
 			DialogElement.button("search", "Search"),

@@ -22,7 +22,8 @@ class JoinRequest(Collection):
 		world: World | None = self.server.get_world(name)
 
 		if world == None:
-			world = WorldGenerator.default(World(name, spawn_pos=(30, 40)), self.items_data)
+			world = WorldGenerator.default(World(name, spawn_pos=(50, 28)))
+			world.version = 20
 
 			self.server.add_world(world)
 
@@ -32,7 +33,7 @@ class JoinRequest(Collection):
 		# Add the Fist and Wrench to the players inventory
 		for item in ["fist", "wrench"]:
 			ctx.player.inventory.add_item(
-				self.items_data.get_item(name=item).id, 
+				self.items_data.get_item(item).id, 
 				count=1
 			)
 

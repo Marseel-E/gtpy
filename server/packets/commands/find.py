@@ -15,7 +15,7 @@ class FindCommand(Collection):
 		self.player_tribute: PlayerTribute = player_tribute
 
 		
-	@Command(name="find")
+	@Command(name="find", aliases=["f"])
 	async def handler(self, ctx: ServerContext, *, item: str = "") -> None:
 		if not item:
 			return ctx.player.send(
@@ -24,7 +24,7 @@ class FindCommand(Collection):
 
 		name: str = item.replace("_", " ")
 
-		item: Item | None = self.items_data.get_item(name=name)
+		item: Item | None = self.items_data.get_item(name)
 
 		if item == None:
 			return ctx.player.send_log(f"`4\"`5{name}`4\" not found.")
