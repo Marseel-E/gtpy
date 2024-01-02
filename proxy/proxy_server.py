@@ -81,7 +81,6 @@ class ProxyServer:
                 return
             elif event_id == EventID.OnSuperMain:
                 print(packet.data)
-                exit(0)
 
         # print("PROXY SERVER > {}".format(packet.data[0:250]))
 
