@@ -23,6 +23,10 @@ class TileActivateRequest(Collection):
 
 		action_type: int = ctx.item.action_type
 
+		# Wrench
+		if action_type == 1:
+			print("wrenching some shit\n")
+
 		# Doors
 		if action_type == 2:
 			destination = "start"
