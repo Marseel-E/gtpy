@@ -16,7 +16,7 @@ class GenWorld(Collection):
 		
 
 	@Command(name="genworld", aliases=["gw"])
-	async def handler(self, ctx: ServerContext, *, foreground, background) -> None:
+	async def handler(self, ctx: ServerContext, *, foreground: str, background: str) -> None:
 		# Foreground
 		foreground: Item | None = self.items_data.get_item(foreground.replace("_", " "))
 

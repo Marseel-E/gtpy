@@ -1,4 +1,4 @@
-from growtopia import Dialog, GameServer, ItemsData, PlayerTribute, DialogElement, Listener, ServerContext
+from growtopia import Dialog, GameServer, ItemsData, PlayerTribute, DialogElement, Listener, ServerContext, Tile, Item
 
 
 class DoorDialog(Dialog):
@@ -22,8 +22,16 @@ class DoorDialog(Dialog):
 
 	@Listener
 	async def on_dialog_return(self, ctx: ServerContext) -> None:
-		from rich import pprint
-		print("door_dialog:")
+		from rich import print as pprint
+		print("door_dialog:", self._tile_pos)
 		pprint(ctx.packet.__dict__)
 
-		ctx.player.send(packet=ctx.packet)
+		tile: Tile = ctx.world.get_tile(*self._tile_pos)
+		
+		label: str = ctx.packet.arguments.get('door_label')
+
+		tile._set_door_extra_data(label)
+
+		ctx.world.broadcast(tile.update_packet)
+
+		

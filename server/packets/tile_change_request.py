@@ -1,4 +1,4 @@
-from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext
+from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, Dialog
 
 
 class TileChangeRequest(Collection):
@@ -18,10 +18,10 @@ class TileChangeRequest(Collection):
 	@Listener
 	async def on_tile_change_request(self, ctx: ServerContext) -> None:
 		from rich import print as pprint
-		pprint(ctx.item.action_type)
-		
-		# Catch wrench
-		if ctx.item.action_type != 1:
+		pprint("on_tile_change_request: action type: ", ctx.item.action_type)
+
+		# Catch clothing, consumables, ances
+		if ctx.item.action_type not in [20, 8, 107]:
 			await self.on_tile_place(ctx)
 
 		ctx.world.broadcast(ctx.tile.update_packet)
@@ -47,33 +47,51 @@ class TileChangeRequest(Collection):
 	@Listener
 	async def on_tile_place(self, ctx: ServerContext) -> None:
 		kwargs = {}
+
+		from rich import print as pprint
+		print("on_tile_place: ")
+		pprint(ctx.item.__dict__)
 		
+		# Wrench
+		if ctx.item.action_type == 1:
+			wrench_dialogs: dict[int, Dialog] = {
+				# Door
+				2: ctx.server.get_dialog("door_dialog")
+			}
+
+			action_type: int = ctx.tile.get_layer().action_type
+			dialog: Dialog = wrench_dialogs[action_type]
+			setattr(dialog, "_tile_pos", ctx.tile.pos)
+
+			return ctx.player.send(dialog.packet)
+
 		# Doors
 		if ctx.item.action_type == 2:
-			ctx.tile._set_door_extra_data("test_label")
-
-			kwargs["id"] = ""
-			kwargs["destination"] = "test"
+			kwargs["door_label"] = ctx.tile.label
 
 		ctx.tile.set_item(ctx.item, **kwargs)
 
 		ctx.world.broadcast(ctx.tile.update_packet)
 
-		# foreground blocks = 17
-		# background blocks = 18
-		# locks = 3
-		# doors = 2
 		# wrench = 1
-		# vends = 62
+		# doors = 2
+		# locks = 3
+		# gems = 4
+		# spikes = 6
+		# consumables = 8
+		# entrances = 9
 		# npcs/sings? = 10
 		# jammers = 12
-		# crystals = 56
-		# geiger charger = 100
-		# entrances = 9
 		# bedrock = 15
 		# public lava/lava = 16
-		# spikes = 6
+		# foreground blocks = 17
+		# background blocks = 18
+		# clothing = 20
 		# steam spikes = 45
+		# crystals = 56
+		# vends = 62
 		# automated steam blocks = 69
+		# geiger charger = 100
+		# ances = 107
 		# magplant = 111
 		# magplant remote = 112

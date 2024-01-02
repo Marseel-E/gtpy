@@ -24,5 +24,5 @@ if __name__ == '__main__':
 	from asyncio import run
 
 
-	server = Server("127.0.0.1", 10_000)	
+	server = Server("127.0.0.1", 10_000)
 	run(server.run())

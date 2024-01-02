@@ -16,13 +16,11 @@ class FindCommand(Collection):
 
 		
 	@Command(name="find", aliases=["f"])
-	async def handler(self, ctx: ServerContext, *, item: str = "") -> None:
-		if not item:
+	async def handler(self, ctx: ServerContext, *, name: str | int = "") -> None:
+		if not name:
 			return ctx.player.send(
 				packet=ctx.server.get_dialog("find_dialog").packet
 			)
-
-		name: str = item.replace("_", " ")
 
 		item: Item | None = self.items_data.get_item(name)
 
@@ -31,4 +29,4 @@ class FindCommand(Collection):
 
 		ctx.player.add_inventory_item(item.id, 200)
 
-		ctx.player.send_log(f"`oRecieved `5200 {name}`o!")
+		ctx.player.send_log(f"`oRecieved `5200 {item.name}`o (ID: `5{item.id}`o)!")

@@ -39,6 +39,15 @@ class Events(Collection):
 
 		print("\nLoaded extensions:", list(self.server.extensions.keys()), end="\n\n")
 
+		# while True:
+		# 	items = self.items_data.get_contains(input(">>> "))
+
+		# 	if len(items) < 1:
+		# 		continue
+
+		# 	for item in items:
+		# 		print(item.clothing_type, item, sep=" | ", end="\n\n")
+
 
 	@Listener
 	async def on_login_request(self, ctx: ServerContext) -> None:

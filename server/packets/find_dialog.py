@@ -40,7 +40,7 @@ class FindDialog(Dialog):
 
 		ctx.player.add_inventory_item(item.id, 200)
 
-		ctx.player.send_log(f"`oRecieved `5200 {item.name.capitalize()}`o!")
+		ctx.player.send_log(f"`oRecieved `5200 {item.name}`o (ID: `5{item.id}`o)!")
 
 
 	@Listener
