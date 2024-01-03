@@ -16,7 +16,10 @@ class WeatherCommand(Collection):
 		
 
 	@Command(name="weather", aliases=["w"])
-	async def handler(self, ctx: ServerContext, *, weather_id: int) -> None:		
+	async def handler(self, ctx: ServerContext, *, weather_id: int) -> None:
+		if weather_id == "23":
+			return ctx.player.send_log("`4This weather is not implemented (Probably stuff), setting it will crash the game.")
+
 		ctx.world.weather_id = int(weather_id)
 		
 		ctx.player.send_to_world(ctx.world)

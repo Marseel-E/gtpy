@@ -1,4 +1,5 @@
-from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, Dialog, Item, DialogElement, World
+from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, Dialog, Item, DialogElement, World, DialogReturn
+from growtopia.enums import NameTitle
 
 
 class Wrench(Collection):
@@ -25,6 +26,7 @@ class Wrench(Collection):
 		if world != None:
 			world = ctx.world
 
+		# Add clothings
 		player_clothing = [
 			ctx.player.hat,
 			ctx.player.chest,
@@ -51,8 +53,43 @@ class Wrench(Collection):
 				DialogElement.label_with_icon_small(f"`6{item.name} `o(ID: `5{item.id}`o)", item.id)
 			)
 
-		print(clothing_elements, end="\n\n")
+		# Clothing label
+		if clothing_elements != []:
+			clothing_elements.insert(
+				0, 
+				DialogElement.smalltext("`oClothing:")
+		)
 
+		# Add titles
+		titles: list[DialogElement] = []
+		for title in ctx.player.titles:
+			name = repr(title)
+			# <NameTitle.NAME: '...'>
+			name = name.split(":")
+			# ["<NameTitle.NAME", " '...'>"]
+			name = name[0]
+			# <NameTitle.NAME
+			name = name.split(".")
+			# ["<NameTitle", "NAME"]
+			name = name[1]
+			# NAME
+
+			titles.append(
+				DialogElement.checkbox(
+					name,
+					name.replace('_', ' '),
+					True
+				)
+			)
+
+		# Titles label
+		if titles != []:
+			titles.insert(
+				0,
+				DialogElement.smalltext("`oTitles:")
+			)
+
+		# Format dialog
 		dialog.add_elements(
 			DialogElement.quick_exit(),
 			DialogElement.label_with_icon_big(f"`o{ctx.player.name} `o(Level: `20`o)", self.items_data.get_item("no-face").id),
@@ -62,10 +99,11 @@ class Wrench(Collection):
 			DialogElement.smalltext(f"`oCurrent world: `w{world.name}"),
 			DialogElement.smalltext(f"`oFloating objects: `w{len(world.objects)}"),
 			DialogElement.smalltext(f"`oPlayers in world: `w{len(world.players)}"),
-			DialogElement.smalltext("`oClothing:"),
+			"\n".join(titles),
 			"\n".join(clothing_elements),
 			DialogElement.smalltext(f"`oDays since account was created `w{ctx.player.login_info.player_age}`o, total playtime `w{ctx.player.login_info.totalPlaytime}`o hours."),
 			DialogElement.ending("wrench_dialog", "", "")
 		)
 
+		# Send dialog
 		ctx.player.send(dialog.packet)
