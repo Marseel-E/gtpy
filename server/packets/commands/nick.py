@@ -24,6 +24,14 @@ class NickCommand(Collection):
 		await ctx.player.change_name(name)
 
 	
+	@Command(name="reset_titles", aliases=["rt"])
+	async def reset_titles_handler(self, ctx: ServerContext) -> None:
+		ctx.player.titles = []
+		ctx.player.name_color = ""
+
+		await ctx.player.change_name()
+
+	
 	@Command(name="legendary", aliases=["legend"])
 	async def legendary_handler(self, ctx: ServerContext) -> None:
 		await ctx.player.add_title(NameTitle.LEGENDARY)

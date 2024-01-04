@@ -1,5 +1,7 @@
 from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, GameUpdatePacket, GameUpdatePacketType, VariantList
 
+from random import randint
+
 
 class StateUpdate(Collection):
 	def __init__(
@@ -20,21 +22,20 @@ class StateUpdate(Collection):
 		# Set Character State
 		packet: GameUpdatePacket = GameUpdatePacket(
 			update_type=GameUpdatePacketType.SET_CHARACTER_STATE,
-			net_id=ctx.player.net_id
+			net_id=ctx.player.net_id,
+			int_=ctx.player.punch_id
 		)
 
 		ctx.player.send(packet=packet)
 
-		packet.update_type = GameUpdatePacketType.CALL_FUNCTION
-
-		# On Set Clothing
-		packet.variant_list = VariantList(
-			"OnSetClothing",
-			(12, 0, 0),
-			(0, 0, 0),
-			(0, 0, 0),
-			1348237567,
-			(0, 0, 0),
+		# Clothing update
+		packet = GameUpdatePacket(
+			update_type=GameUpdatePacketType.CALL_FUNCTION,
+			net_id=ctx.player.net_id,
+			variant_list=VariantList(
+				"OnSetClothing",
+				*ctx.player.get_clothing()
+			)
 		)
 
-		ctx.player.send(packet=packet)
+		ctx.player.send(packet)
