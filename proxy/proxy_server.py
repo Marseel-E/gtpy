@@ -1,4 +1,14 @@
-__all__ = ['ProxyServer']
+__all__ = ["ProxyServer"]
+
+
+from logging import root, DEBUG, basicConfig, debug
+
+for handler in root.handlers[:]:
+    root.removeHandler(handler)
+
+basicConfig(
+    level=DEBUG, datefmt="%d-%b-%y %H:%M:%S", format="[%(asctime)s]: %(message)s"
+)
 
 
 import enet
@@ -19,6 +29,9 @@ class ProxyServer:
         self.game_client_peer: enet.Peer = None
         self.target_host_n_port = None
 
+        self.logging: bool = False
+
+
     async def run(self) -> None:
         proxy_client: ProxyClient = None
 
@@ -33,7 +46,8 @@ class ProxyServer:
 
             match event.type:
                 case enet.EVENT_TYPE_CONNECT:
-                    print("GAME CLIENT > connected")
+                    debug("GAME CLIENT > connected")
+                    
                     if proxy_client:
                         proxy_client.stop()
 
@@ -43,12 +57,26 @@ class ProxyServer:
                     asyncio.create_task(proxy_client.run())
 
                 case enet.EVENT_TYPE_RECEIVE:
-                    print("GAME CLIENT: {}".format(event.packet.data))
+                    debug("GAME CLIENT: {}".format(event.packet.data))
+
+                    if b"/start_logging" in event.packet.data:
+                        self.logging = True
+                        debug("GAME CLIENT > logging enabled")
+                        continue
+
+                    if b"/stop_logging" in event.packet.data:
+                        self.logging = False
+                        debug("GAME CLIENT > logging disabled")
+                        continue
+
+                    if self.logging:
+                        debug("GAME CLIENT > {}".format(event.packet.data))
+
                     if proxy_client:
                         proxy_client.send(event.packet)
 
                 case enet.EVENT_TYPE_DISCONNECT:
-                    print("GAME CLIENT > disconnected")
+                    debug("GAME CLIENT > disconnected")
 
     def send(self, packet: enet.Packet) -> None:
         packet_type = Packet.get_type(packet.data)
@@ -70,19 +98,18 @@ class ProxyServer:
                     4
                 ].value.replace(self.target_host_n_port[0], "127.0.0.1")
                 update_packet.set_variant_list(update_packet.variant_list)
-                print(update_packet.serialise())
+                debug(update_packet.serialise())
 
                 self.game_client_peer.send(
                     0, enet.Packet(update_packet.serialise(), enet.PACKET_FLAG_RELIABLE)
                 )
 
-                print("PROXY CLIENT > Moving to {}".format(self.target_host_n_port))
+                debug("PROXY CLIENT > Moving to {}".format(self.target_host_n_port))
 
                 return
-            elif event_id == EventID.OnSuperMain:
-                print(packet.data)
 
-        # print("PROXY SERVER > {}".format(packet.data[0:250]))
+        if self.logging:
+            debug("GAME CLIENT > {}".format(packet.data))
 
         if self.game_client_peer:
             self.game_client_peer.send(0, packet)

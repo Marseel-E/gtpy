@@ -1,0 +1,4 @@
+[06-Jan-24 05:10:47]: Using selector: KqueueSelector
+[06-Jan-24 05:10:54]: GAME CLIENT > connected
+[06-Jan-24 05:10:54]: Starting new HTTPS connection (1): 127.0.0.1:443
+[06-Jan-24 05:10:54]: https://127.0.0.1:443 "GET /fetch_targets HTTP/1.1" 200 44

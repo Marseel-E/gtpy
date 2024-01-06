@@ -36,11 +36,12 @@ class ProxyClient:
 
             match event.type:
                 case enet.EVENT_TYPE_CONNECT:
-                    print("PROXY CLIENT > connected to the serve")
+                    print("PROXY CLIENT > connected to the server")
                 case enet.EVENT_TYPE_RECEIVE:
                     self.proxy_srv.send(event.packet)
                 case enet.EVENT_TYPE_DISCONNECT:
                     print("PROXY CLIENT > disconnected from the server")
+                    
                     break
 
     def send(self, packet: enet.Packet) -> None:

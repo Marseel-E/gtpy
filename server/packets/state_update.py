@@ -25,14 +25,10 @@ class StateUpdate(Collection):
 			net_id=ctx.player.net_id
 		)
 
-		if GameUpdatePacketFlags.FACING_LEFT in packet.flags:
-			packet.flags.remove(GameUpdatePacketFlags.FACING_LEFT)
+		from rich import print as pprint
+		pprint(packet.flags, end="\n\n")
 
 		ctx.player.send(packet=packet)
-
-		packet.serialise()
-		from rich import print as pprint
-		pprint("on_state_update:\n", packet.flags, end="\n\n")
 
 		# Clothing update
 		packet = GameUpdatePacket(
@@ -43,8 +39,5 @@ class StateUpdate(Collection):
 				*ctx.player.get_clothing()
 			)
 		)
-
-		if GameUpdatePacketFlags.FACING_LEFT in packet.flags:
-			packet.flags.remove(GameUpdatePacketFlags.FACING_LEFT)
 
 		ctx.player.send(packet)
