@@ -1,4 +1,4 @@
-from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, GameUpdatePacket, GameUpdatePacketType, VariantList
+from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, GameUpdatePacket, GameUpdatePacketType, VariantList, GameUpdatePacketFlags
 
 from random import randint
 
@@ -22,11 +22,17 @@ class StateUpdate(Collection):
 		# Set Character State
 		packet: GameUpdatePacket = GameUpdatePacket(
 			update_type=GameUpdatePacketType.SET_CHARACTER_STATE,
-			net_id=ctx.player.net_id,
-			int_=ctx.player.punch_id
+			net_id=ctx.player.net_id
 		)
 
+		if GameUpdatePacketFlags.FACING_LEFT in packet.flags:
+			packet.flags.remove(GameUpdatePacketFlags.FACING_LEFT)
+
 		ctx.player.send(packet=packet)
+
+		packet.serialise()
+		from rich import print as pprint
+		pprint("on_state_update:\n", packet.flags, end="\n\n")
 
 		# Clothing update
 		packet = GameUpdatePacket(
@@ -37,5 +43,8 @@ class StateUpdate(Collection):
 				*ctx.player.get_clothing()
 			)
 		)
+
+		if GameUpdatePacketFlags.FACING_LEFT in packet.flags:
+			packet.flags.remove(GameUpdatePacketFlags.FACING_LEFT)
 
 		ctx.player.send(packet)
