@@ -1,6 +1,4 @@
-from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext, GameUpdatePacket, GameUpdatePacketType, VariantList, GameUpdatePacketFlags
-
-from random import randint
+from growtopia import Collection, GameServer, ItemsData, PlayerTribute, Listener, ServerContext
 
 
 class StateUpdate(Collection):
@@ -19,25 +17,7 @@ class StateUpdate(Collection):
 
 	@Listener
 	async def on_state_update(self, ctx: ServerContext) -> None:
-		# Set Character State
-		packet: GameUpdatePacket = GameUpdatePacket(
-			update_type=GameUpdatePacketType.SET_CHARACTER_STATE,
-			net_id=ctx.player.net_id
-		)
+		# Movement packet
+		ctx.packet.net_id = ctx.player.net_id
 
-		from rich import print as pprint
-		pprint(packet.flags, end="\n\n")
-
-		ctx.player.send(packet=packet)
-
-		# Clothing update
-		packet = GameUpdatePacket(
-			update_type=GameUpdatePacketType.CALL_FUNCTION,
-			net_id=ctx.player.net_id,
-			variant_list=VariantList(
-				"OnSetClothing",
-				*ctx.player.get_clothing()
-			)
-		)
-
-		ctx.player.send(packet)
+		ctx.world.broadcast(ctx.packet, ctx.player.net_id)

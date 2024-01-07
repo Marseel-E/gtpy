@@ -60,4 +60,4 @@ class ItemActivateRequest(Collection):
 			)
 		)
 
-		ctx.player.send(packet)
+		ctx.world.broadcast(packet)

@@ -18,6 +18,8 @@ class Wrench(Collection):
 
 	@Listener
 	async def on_wrench(self, ctx: ServerContext) -> None:
+		print("on_wrench/target_net_id: ", ctx.target_net_id, end="\n\n")
+
 		dialog = Dialog("wrench_dialog")
 
 		# World info

@@ -22,4 +22,5 @@ class WeatherCommand(Collection):
 
 		ctx.world.weather_id = int(weather_id)
 		
-		ctx.player.send_to_world(ctx.world)
+		for _, player in ctx.world.players.items():
+			player.send_to_world(ctx.world)

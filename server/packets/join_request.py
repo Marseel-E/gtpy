@@ -27,7 +27,7 @@ class JoinRequest(Collection):
 			self.server.add_world(world)
 
 		# [DEBUG] makes the player super moderator
-		ctx.player.super_moderator = True
+		# ctx.player.super_moderator = True
 
 		# Add the Fist and Wrench to the players inventory
 		for item in ["fist", "wrench"]:
